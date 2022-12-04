@@ -1,6 +1,8 @@
 # CovidDashboard
 
-**Data Collection from worldometers.info**
+This repository includes a main file CovidMain.py, a module to scrape data from websites ScrapeWebsites.py, and json files for 2 consecutive days of global COVID death rate data. The code is dependent on the following libraries: BeautifulSoup, json, requests.
+
+**Data Collection using Scrapy**
 
   * Using scrapy, the worldometer.py file contains a code that extracts the total deaths and new deaths from a day and two days ago.
   *	This file contains two classes:
@@ -23,8 +25,7 @@
                    }
           ```
         
-    *	It contains two definitions:
-        *	```def start_requests(self):```
+    *	It contains the definition:
         *	```def parse(self,response):```
         
   *	The function ‘start_requests’ specifies the url from which we want to scrape data from
