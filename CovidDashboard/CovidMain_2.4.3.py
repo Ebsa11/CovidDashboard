@@ -17,19 +17,19 @@ from WOMScrapeFunc import Scrape3Days
 from bokeh.layouts import row
 from bokeh.models import ColumnDataSource, HoverTool,DataTable, TableColumn
 from bokeh.plotting import show, output_file
-
-
-
 from bokeh.models.widgets import Panel, Tabs
 from bokeh.transform import dodge
 from bokeh.io import output_notebook  # added
 from bokeh.resources import INLINE    # added
+import os
+dirname = os.getcwd()
+filename = os.path.join(dirname, 'SavedData')
 output_notebook(INLINE)               # added
 
 
 
-# Uncomment to save output html to a file
-# output_file(filename="COVID_results.html", title="Static HTML file")
+# Save output html
+output_file(filename="COVID_results.html", title="Static HTML file")
 
 # GET DATA
 data_today,data_yesterday,data_yesterday2 = Scrape3Days()
