@@ -15,23 +15,23 @@ from bokeh.models import ColumnDataSource, HoverTool,DataTable, TableColumn
 from bokeh.plotting import show, output_file
 from bokeh.models import TabPanel, Tabs
 from bokeh.transform import dodge
-from bokeh.io import output_notebook  # added
-from bokeh.resources import INLINE    # added
+from bokeh.io import output_notebook
+from bokeh.resources import INLINE    
 import os, json
-dirname = os.getcwd()
-output_notebook(INLINE)               # added
-
+output_notebook(INLINE)               
 
 # Save output html
 output_file(filename="COVID_results.html", title="Static HTML file")
 
-
 # ===================================SAVED DATA========================================== START
 dirname = os.getcwd()
+filename3 = os.path.join(dirname, 'SavedData\WOM12-3-22.json')
 filename4 = os.path.join(dirname, 'SavedData\WOM12-4-22.json')
 filename7 = os.path.join(dirname, 'SavedData\WOM12-7-22.json')
 filename8 = os.path.join(dirname, 'SavedData\WOM12-8-22.json')
 
+with open(filename3) as json_file:
+    data_12_3_22 = json.load(json_file)
 
 with open(filename4) as json_file:
     data_12_4_22 = json.load(json_file)
@@ -42,6 +42,81 @@ with open(filename7) as json_file:
 with open(filename8) as json_file:
     data_12_8_22 = json.load(json_file)
 
+
+clean1 = [',',' ','"','\n','[',']']#clean data for 12-3-22
+clean3 = ['+']
+clean2 = ['N/A'] 
+newDeaths = []
+totalDeaths = []
+for i in range(2,len(data_12_3_22['Daily Deaths'])):
+    newWord = data_12_3_22['Daily Deaths'][i]
+    totalWord = data_12_3_22['Cumulative Deaths'][i]
+    for char in clean2:
+      newWord = newWord.replace(char,"0")
+    for char in clean3:
+      newWord = newWord.replace(char,'')
+    for char in clean1:
+      totalWord = totalWord.replace(char,'')
+
+    newDeaths.append(newWord)
+    totalDeaths.append(totalWord)
+
+data_12_3_22["Daily Deaths"] = newDeaths
+data_12_3_22["Cumulative Deaths"] = totalDeaths
+
+
+
+clean1 = [',',' ','"','\n','[',']']#clean data for 12-7-22
+clean3 = ['+']
+clean2 = ['N/A'] 
+newDeaths = []
+totalDeaths = []
+for i in range(2,len(data_12_7_22['Daily Deaths'])):
+    newWord = data_12_7_22['Daily Deaths'][i]
+    totalWord = data_12_7_22['Cumulative Deaths'][i]
+    for char in clean2:
+      newWord = newWord.replace(char,"0")
+    for char in clean3:
+      newWord = newWord.replace(char,'')
+    for char in clean1:
+      totalWord = totalWord.replace(char,'')
+
+    newDeaths.append(newWord)
+    totalDeaths.append(totalWord)
+
+data_12_7_22["Daily Deaths"] = newDeaths
+data_12_7_22["Cumulative Deaths"] = totalDeaths
+
+
+# 12_3_22 SECTION
+# Get TOTAL 12_3_22's deaths
+
+total_deaths_12_3_22 = list(data_12_3_22['Cumulative Deaths'])
+total_deaths_12_3_22_sort_index = np.argsort(total_deaths_12_3_22)
+total_deaths_12_3_22_ranks = [0]*len(total_deaths_12_3_22)
+for i in range(1,len(total_deaths_12_3_22)):
+  total_deaths_12_3_22_ranks[total_deaths_12_3_22_sort_index[-i]] = i
+
+# Get NEW 12_3_22's deaths
+new_deaths_12_3_22 = list(data_12_3_22['Daily Deaths'])
+new_deaths_12_3_22_sort_index = np.argsort(new_deaths_12_3_22)
+new_deaths_12_3_22_ranks = [0]*len(new_deaths_12_3_22)
+for i in range(1,len(new_deaths_12_3_22)):
+  new_deaths_12_3_22_ranks[new_deaths_12_3_22_sort_index[-i]] = i
+  
+# Get TOTAL POP 12_3_22's deaths
+total_deaths_pop_12_3_22 = list(data_12_3_22['Population Cumulative Deaths'])
+total_deaths_pop_12_3_22_sort_index = np.argsort(total_deaths_pop_12_3_22)
+total_deaths_pop_12_3_22_ranks = [0]*len(total_deaths_pop_12_3_22)
+for i in range(1,len(total_deaths_pop_12_3_22)):
+  total_deaths_pop_12_3_22_ranks[total_deaths_pop_12_3_22_sort_index[-i]] = i
+
+# Get NEW POP 12_3_22's deaths
+new_deaths_pop_12_3_22 = list(data_12_3_22['Population Daily Deaths'])
+new_deaths_pop_12_3_22_sort_index = np.argsort(new_deaths_pop_12_3_22)
+new_deaths_pop_12_3_22_ranks = [0]*len(new_deaths_pop_12_3_22)
+for i in range(1,len(new_deaths_pop_12_3_22)):
+  new_deaths_pop_12_3_22_ranks[new_deaths_pop_12_3_22_sort_index[-i]] = i
 
 
 
@@ -113,7 +188,6 @@ for i in range(1,len(new_deaths_pop_12_7_22)):
 
 
 
-
 # 12_8_22 SECTION
 # Get TOTAL 12_8_22's deaths
 total_deaths_12_8_22 = list(data_12_8_22['Cumulative Deaths'])
@@ -149,6 +223,28 @@ new_deaths_pop_12_8_22_ranks = [0]*len(new_deaths_pop_12_8_22)
 for i in range(1,len(new_deaths_pop_12_8_22)):
   new_deaths_pop_12_8_22_ranks[new_deaths_pop_12_8_22_sort_index[-i]] = i
   
+
+
+
+
+# MAKE DICTIONARY FOR 12_3_22'S DEATHS
+data_12_3_22 = {'Countries_12_3_22': np.array(data_12_3_22['Country']),
+        'Total_deaths_12_3_22': total_deaths_12_3_22,
+        'Total_deaths_12_3_22_ranking': total_deaths_12_3_22_ranks,
+        'Total_deaths_12_3_22_str': data_12_3_22["Cumulative Deaths"],
+        'New_deaths_12_3_22': new_deaths_12_3_22,
+        'New_deaths_12_3_22_ranking': new_deaths_12_3_22_ranks,
+        'New_deaths_12_3_22_str': data_12_3_22["Daily Deaths"],
+        'Total_deaths_pop_12_3_22': total_deaths_pop_12_3_22,
+        'Total_deaths_pop_12_3_22_ranking': total_deaths_pop_12_3_22_ranks,
+        'Total_deaths_pop_12_3_22_str': data_12_3_22["Population Cumulative Deaths"],
+        'New_deaths_pop_12_3_22': new_deaths_pop_12_3_22,
+       'New_deaths_pop_12_3_22_ranking': new_deaths_pop_12_3_22_ranks,
+        'New_deaths_pop_12_3_22_str': data_12_3_22["Population Daily Deaths"]}
+source_12_3_22 = ColumnDataSource(data_12_3_22)
+numCountries_12_3_22 = np.flip(source_12_3_22.data['Countries_12_3_22'].tolist())
+
+
 
 
 # MAKE DICTIONARY FOR 12_4_22'S DEATHS
@@ -206,6 +302,146 @@ data_12_8_22 = {'Countries_12_8_22': np.array(data_12_8_22['Country']),
         'New_deaths_pop_12_8_22_str': data_12_8_22["Population Daily Deaths"]}
 source_12_8_22 = ColumnDataSource(data_12_8_22)
 numCountries_12_8_22 = np.flip(source_12_8_22.data['Countries_12_8_22'].tolist())
+
+
+# CREATE FIGURE FOR 12_3_22
+p13 = figure(
+    y_range=numCountries_12_3_22,
+    width=800,
+    height=2500,
+    title = 'COVID-19 World''s Data - 12_3_22',
+    x_axis_label = 'Number of deaths',
+    tools="pan,box_select,zoom_in,zoom_out,reset"
+    )
+
+# Create Histogram
+p13.hbar(
+    y=dodge('Countries_12_3_22',0.0, range=p13.y_range),
+    right='Total_deaths_12_3_22',
+    left=0,
+    height=0.4,
+    color='red',
+    fill_alpha=0.9,
+    source=source_12_3_22
+    )
+
+# Create Hover Tool
+hover = HoverTool()
+hover.tooltips = """
+<div>
+  <h3>@Countries_12_3_22</h3>
+  <div><strong>Total Deaths: </strong>@Total_deaths_12_3_22_str</div>
+  <div><strong>Ranking: #</strong>@Total_deaths_12_3_22_ranking</div>
+</div>
+"""
+p13.add_tools(hover)
+
+
+p14 = figure(
+    y_range=numCountries_12_3_22,
+    width=800,
+    height=2500,
+    title = 'COVID-19 World''s Data - 12_3_22',
+    x_axis_label = 'Number of deaths',
+    tools="pan,box_select,zoom_in,zoom_out,reset"
+    )
+
+# Create Histogram
+p14.hbar(
+    y=dodge('Countries_12_3_22',0.0, range=p14.y_range),
+    right='New_deaths_12_3_22',
+    left=0,
+    height=0.4,
+    color='blue',
+    fill_alpha=0.9,
+    source=source_12_3_22
+    )
+
+# Create Hover Tool
+hover = HoverTool()
+hover.tooltips = """
+<div>
+  <h3>@Countries_12_3_22</h3>
+  <div><strong>New Deaths: </strong>@New_deaths_12_3_22_str</div>
+  <div><strong>Ranking: #</strong>@New_deaths_12_3_22_ranking</div>
+</div>
+"""
+p14.add_tools(hover)
+
+p15 = figure(
+    y_range=numCountries_12_3_22,
+    width=800,
+    height=2500,
+    title = 'COVID-19 World''s Data - 12_3_22',
+    x_axis_label = 'Number of deaths',
+    tools="pan,box_select,zoom_in,zoom_out,reset"
+    )
+
+# Create Histogram
+p15.hbar(
+    y=dodge('Countries_12_3_22',0.0, range=p15.y_range),
+    right='Total_deaths_pop_12_3_22',
+    left=0,
+    height=0.4,
+    color='green',
+    fill_alpha=0.9,
+    source=source_12_3_22
+    )
+
+# Create Hover Tool
+hover = HoverTool()
+hover.tooltips = """
+<div>
+  <h3>@Countries_12_3_22</h3>
+  <div><strong>Total Deaths: </strong>@Total_deaths_pop_12_3_22_str</div>
+  <div><strong>Ranking: #</strong>@Total_deaths_pop_12_3_22_ranking</div>
+</div>
+"""
+p15.add_tools(hover)
+
+p16 = figure(
+    y_range=numCountries_12_3_22,
+    width=800,
+    height=2500,
+    title = 'COVID-19 World''s Data - 12_3_22',
+    x_axis_label = 'Number of deaths',
+    tools="pan,box_select,zoom_in,zoom_out,reset"
+    )
+
+# Create Histogram
+p16.hbar(
+    y=dodge('Countries_12_3_22',0.0, range=p16.y_range),
+    right='New_deaths_pop_12_3_22',
+    left=0,
+    height=0.4,
+    color='orange',
+    fill_alpha=0.9,
+    source=source_12_3_22
+    )
+
+# Create Hover Tool
+hover = HoverTool()
+hover.tooltips = """
+<div>
+  <h3>@Countries_12_3_22</h3>
+  <div><strong>Total Deaths: </strong>@New_deaths_pop_12_3_22_str</div>
+  <div><strong>Ranking: #</strong>@New_deaths_pop_12_3_22_ranking</div>
+</div>
+"""
+p16.add_tools(hover)
+
+# Make Table
+columns4 = [
+        TableColumn(field='Countries_12_3_22', title="Countries"),
+        TableColumn(field="Total_deaths_12_3_22", title="Total Deaths"),
+        TableColumn(field="New_deaths_12_3_22", title="New Deaths"),
+        TableColumn(field="Total_deaths_pop_12_3_22", title="Total Deaths by Population"),
+        TableColumn(field="New_deaths_pop_12_3_22", title="New Deaths by Population")
+    ]
+data_table4 = DataTable(source=source_12_3_22, columns=columns4, width=800, height=3000)
+
+
+
 
 
 # CREATE FIGURE FOR 12_4_22
@@ -476,8 +712,8 @@ p24.add_tools(hover)
 # Make Table
 columns6= [
         TableColumn(field='Countries_12_7_22', title="Countries"),
-        TableColumn(field="Total_deaths_pop_12_7_22", title="Total Deaths"),
-        TableColumn(field="New_deaths_pop_12_7_22", title="New Deaths"),
+        TableColumn(field="Total_deaths_12_7_22", title="Total Deaths"),
+        TableColumn(field="New_deaths_12_7_22", title="New Deaths"),
         TableColumn(field="Total_deaths_pop_12_7_22", title="Total Deaths by Population"),
         TableColumn(field="New_deaths_pop_12_7_22", title="New Deaths by Population")
     ]
@@ -622,6 +858,24 @@ columns7 = [
 data_table7 = DataTable(source=source_12_8_22, columns=columns7, width=800, height=3000)
 
 
+
+#12_3_22 TABS
+fig13 = row(p13, data_table4)
+tab13 = TabPanel(child=fig13, title="Total Deaths")
+
+
+fig14 = row(p14, data_table4)
+tab14 = TabPanel(child=fig14, title="New Deaths")
+
+
+fig15 = row(p15, data_table4)
+tab15 = TabPanel(child=fig15, title="Total Deaths by Population")
+
+fig16 = row(p16, data_table4)
+tab16 = TabPanel(child=fig16, title="New Deaths by Population")
+
+
+
 #12_4_22 TABS
 fig17 = row(p17, data_table5)
 tab17 = TabPanel(child=fig17, title="Total Deaths")
@@ -672,11 +926,13 @@ tab28 = TabPanel(child=fig28, title="New Deaths by Population")
 
 
 
+tabs4 = Tabs(tabs=[ tab13, tab14, tab15, tab16])
 tabs5 = Tabs(tabs=[ tab17, tab18, tab19, tab20])
 tabs6 = Tabs(tabs=[ tab21, tab22, tab23, tab24])
 tabs7 = Tabs(tabs=[ tab25, tab26, tab27, tab28])
 
 
+MainTab4 = TabPanel(child=tabs4, title= "Data of 12-3-22")
 MainTab5 = TabPanel(child=tabs5, title= "Data of 12-4-22")
 MainTab6 = TabPanel(child=tabs6, title= "Data of 12-7-22")
 MainTab7 = TabPanel(child=tabs7, title= "Data of 12-8-22")
@@ -1356,10 +1612,9 @@ MainTab3 = TabPanel(child=tabs3, title= "2 Days Ago")
 
 
 #FINAL TAB
-finaltab = Tabs(tabs=[MainTab1,MainTab2,MainTab3,MainTab5,MainTab6,MainTab7])
+finaltab = Tabs(tabs=[MainTab1,MainTab2,MainTab3,MainTab4,MainTab5,MainTab6,MainTab7])
 
 show(finaltab)
-
 
 
 
