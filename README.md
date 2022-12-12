@@ -2,7 +2,7 @@
 
 This repository includes:
  * CovidMain.py to visualize Covid death rates using Bokeh
- * A module that scrapes data from a website ScrapeWebsite.py
+ * ScrapeWebsite.py and ScrapeCountry.py modules to collect Covid death rate data from websites
  * Data in JSON files for 5 days of global COVID death rate data. 
  
 The code is dependent on the following libraries: BeautifulSoup, Bokeh, numpy, re, json, and requests. 
