@@ -13,7 +13,7 @@ Original file is located at
 import numpy as np
 import re
 from bokeh.plotting import figure
-from ScrapeWebsite import Scrape3Days
+from WOMScrapeFunc import Scrape3Days
 from bokeh.layouts import row
 from bokeh.models import ColumnDataSource, HoverTool,DataTable, TableColumn
 from bokeh.plotting import show, output_file
@@ -35,10 +35,10 @@ output_file(filename="COVID_results.html", title="Static HTML file")
 
 # ===================================SAVED DATA========================================== START
 dirname = os.getcwd()
-filename3 = os.path.join(dirname, 'SavedData\WOM12-3-22.json')
-filename4 = os.path.join(dirname, 'SavedData\WOM12-4-22.json')
-filename7 = os.path.join(dirname, 'SavedData\WOM12-7-22.json')
-filename8 = os.path.join(dirname, 'SavedData\WOM12-8-22.json')
+filename3 = os.path.join(dirname, 'WOM12-3-22.json')
+filename4 = os.path.join(dirname, 'WOM12-4-22.json')
+filename7 = os.path.join(dirname, 'WOM12-7-22.json')
+filename8 = os.path.join(dirname, 'WOM12-8-22.json')
 
 with open(filename3) as json_file:
     data_12_3_22 = json.load(json_file)
@@ -53,6 +53,49 @@ with open(filename8) as json_file:
     data_12_8_22 = json.load(json_file)
 
 
+clean1 = [',',' ','"','\n','[',']']#clean data for 12-3-22
+clean3 = ['+']
+clean2 = ['N/A'] 
+newDeaths = []
+totalDeaths = []
+for i in range(2,len(data_12_3_22['Daily Deaths'])):
+    newWord = data_12_3_22['Daily Deaths'][i]
+    totalWord = data_12_3_22['Cumulative Deaths'][i]
+    for char in clean2:
+      newWord = newWord.replace(char,"0")
+    for char in clean3:
+      newWord = newWord.replace(char,'')
+    for char in clean1:
+      totalWord = totalWord.replace(char,'')
+
+    newDeaths.append(newWord)
+    totalDeaths.append(totalWord)
+
+data_12_3_22["Daily Deaths"] = newDeaths
+data_12_3_22["Cumulative Deaths"] = totalDeaths
+
+
+
+clean1 = [',',' ','"','\n','[',']']#clean data for 12-7-22
+clean3 = ['+']
+clean2 = ['N/A'] 
+newDeaths = []
+totalDeaths = []
+for i in range(2,len(data_12_7_22['Daily Deaths'])):
+    newWord = data_12_7_22['Daily Deaths'][i]
+    totalWord = data_12_7_22['Cumulative Deaths'][i]
+    for char in clean2:
+      newWord = newWord.replace(char,"0")
+    for char in clean3:
+      newWord = newWord.replace(char,'')
+    for char in clean1:
+      totalWord = totalWord.replace(char,'')
+
+    newDeaths.append(newWord)
+    totalDeaths.append(totalWord)
+
+data_12_7_22["Daily Deaths"] = newDeaths
+data_12_7_22["Cumulative Deaths"] = totalDeaths
 
 
 # 12_3_22 SECTION
@@ -152,7 +195,6 @@ new_deaths_pop_12_7_22_sort_index = np.argsort(new_deaths_pop_12_7_22)
 new_deaths_pop_12_7_22_ranks = [0]*len(new_deaths_pop_12_7_22)
 for i in range(1,len(new_deaths_pop_12_7_22)):
   new_deaths_pop_12_7_22_ranks[new_deaths_pop_12_7_22_sort_index[-i]] = i
-
 
 
 
@@ -680,8 +722,8 @@ p24.add_tools(hover)
 # Make Table
 columns6= [
         TableColumn(field='Countries_12_7_22', title="Countries"),
-        TableColumn(field="Total_deaths_pop_12_7_22", title="Total Deaths"),
-        TableColumn(field="New_deaths_pop_12_7_22", title="New Deaths"),
+        TableColumn(field="Total_deaths_12_7_22", title="Total Deaths"),
+        TableColumn(field="New_deaths_12_7_22", title="New Deaths"),
         TableColumn(field="Total_deaths_pop_12_7_22", title="Total Deaths by Population"),
         TableColumn(field="New_deaths_pop_12_7_22", title="New Deaths by Population")
     ]
