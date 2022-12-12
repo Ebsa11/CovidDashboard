@@ -14,8 +14,8 @@ When this code is run, an HTML file is automatically created and opened in your 
 **CovidMain.py versions**
 
 There are two versions for the CovidMain.py program. 
-  * The file CovidMain.py is designed for users using Bokeh version 3.0.3
-  * The file CovidMain_2.4.3.py is designed for users using Bokeh version 2.4.3
+  * The file *CovidMain.py* is designed for users using Bokeh version 3.0.3
+  * The file *CovidMain_2.4.3.py* is designed for users using Bokeh version 2.4.3
 
 **Using ScrapeWebsite and ScrapeCountry**
 
