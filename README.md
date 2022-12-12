@@ -11,7 +11,8 @@ The code is dependent on the following libraries: BeautifulSoup, Bokeh, numpy, r
 
 When this code is run, an HTML file is automatically created and opened in your browswer to display the Covid Dashboard. This can also be optionally be opened in an online notebook such as Jupyter Lab simply by running the code in the respective editors. Data for today, yesterday, and two days ago are updated everyday while the death rates from 12-3-22 12-4-22, 12-7-22, and 12-8-22 are from the saved JSON files included to demonstrate the ability to display saved data.
 
-**CovidMain.py versions*
+**CovidMain.py versions**
+
 There are two versions for the CovidMain.py program. 
   * The file CovidMain.py is designed for users using Bokeh version 3.0.3
   * The file CovidMain_2.4.3.py is designed for users using Bokeh version 2.4.3
