@@ -23,5 +23,6 @@ ScrapeWebsite takes no input and outputs the death rate data of every country av
   * Normalized death rate data and data for yesterday and two days ago are only available for worldometer
                   
 **JSON organization**
+
 The .json files contains multiple rows in which each country scraped from worldometers.info has its corresponding values of total deaths and new deaths on individual column cells.
          
